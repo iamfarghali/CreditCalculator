@@ -107,5 +107,5 @@ files:
     print(f'{credit_principal}\n{first_month}\n{second_month}\n{third_month}\n{final_output}')
   learner_created: true
 feedback_link: https://hyperskill.org/projects/90/stages/501/implement
-status: Unchecked
+status: Solved
 record: -1

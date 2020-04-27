@@ -9,7 +9,8 @@ chosen = input()
 if chosen == 'm':
     payment = float(input('Enter monthly payment:\n'))
     months = ceil((principal / payment))
-    print(f'\nIt takes {months} months to repay the credit')
+    month_word = 'months' if months > 1 else 'month'
+    print(f'\nIt takes {months} {month_word} to repay the credit')
 elif chosen == 'p':
     months = float(input('Enter count of months:\n'))
     payment = ceil((principal / months))
