@@ -5,10 +5,14 @@ def monthly_interest_rate(interest):
     return interest / (12 * 100)
 
 
-def months_count(month_payment, month_interest_rate, credit_principle):
-    x = month_payment / (month_payment - (month_interest_rate * credit_principle))
-    base = 1 + month_interest_rate
+def months_count(payment, month_rate, principle):
+    x = payment / (payment - (month_rate * principle))
+    base = 1 + month_rate
     return math.ceil(math.log(x, base))
+
+
+def calc_equation_second_half(month_rate, months):
+    return (month_rate * math.pow((1 + month_rate), months)) / (math.pow((1 + month_rate), months) - 1)
 
 
 def months_number():
@@ -39,6 +43,8 @@ def monthly_payment():
     cm = int(input('Enter count of periods:\n'))
     # Credit Interest
     ci = float(input('Enter credit interest:\n'))
+    mp = math.ceil(cp * calc_equation_second_half(monthly_interest_rate(ci), cm))
+    print(f'Your annuity payment = {mp}!')
 
 
 def credit_principal():
@@ -48,6 +54,8 @@ def credit_principal():
     cm = int(input('Enter count of periods:\n'))
     # Credit Interest
     ci = float(input('Enter credit interest:\n'))
+    cp = round(amp * (1 / calc_equation_second_half(monthly_interest_rate(ci), cm)))
+    print(f'Your credit principal = {cp}!')
 
 
 print('What do you want to calculate? ')
