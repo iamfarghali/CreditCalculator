@@ -2,6 +2,7 @@ import argparse as argp
 import math
 import sys
 
+
 def monthly_interest_rate(interest):
     return interest / (12 * 100)
 
@@ -16,15 +17,9 @@ def calc_equation_second_half(month_rate, months):
     return (month_rate * math.pow((1 + month_rate), months)) / (math.pow((1 + month_rate), months) - 1)
 
 
-def months_number():
-    # Credit Principle
-    cp = float(input('Enter credit principal:\n'))
-    # Annuity Monthly Payment
-    amp = float(input('Enter monthly payment:\n'))
-    # Credit Interest
-    ci = float(input('Enter credit interest:\n'))
+def months_number(cp, mp, ci):
     i = monthly_interest_rate(ci)
-    n = months_count(amp, i, cp)
+    n = months_count(mp, i, cp)
     years = n // 12
     months = n % 12
     year_flag = 'years' if years > 1 else 'year'
@@ -37,26 +32,28 @@ def months_number():
         print(f'You need {months} {month_flag} to repay this credit!')
 
 
-def monthly_payment():
-    # Credit Principle
-    cp = float(input('Enter credit principal:\n'))
-    # Count of Months
-    cm = int(input('Enter count of periods:\n'))
-    # Credit Interest
-    ci = float(input('Enter credit interest:\n'))
-    mp = math.ceil(cp * calc_equation_second_half(monthly_interest_rate(ci), cm))
+def monthly_payment(cp, periods, ci):
+    mp = math.ceil(cp * calc_equation_second_half(monthly_interest_rate(ci), periods))
     print(f'Your annuity payment = {mp}!')
+    print(f'Overpayment = {math.ceil((mp * periods) - cp)}')
 
 
-def credit_principal():
-    # Annuity Monthly Payment
-    amp = float(input('Enter monthly payment:\n'))
-    # Count of Months
-    cm = int(input('Enter count of periods:\n'))
-    # Credit Interest
-    ci = float(input('Enter credit interest:\n'))
-    cp = round(amp * (1 / calc_equation_second_half(monthly_interest_rate(ci), cm)))
+def credit_principal(mp, periods, ci):
+    cp = round(mp * (1 / calc_equation_second_half(monthly_interest_rate(ci), periods)))
     print(f'Your credit principal = {cp}!')
+    print(f'Overpayment = {math.ceil((mp * periods) - cp)}')
+
+
+def diff_payment(cp, periods, ci):
+    i = monthly_interest_rate(ci)
+    m = 1
+    all_payment = 0.0
+    while m <= periods:
+        val = (cp / periods) + (i * (cp - (cp * (m - 1) / periods)))
+        all_payment += val
+        print(f'Month {m}: paid out {math.ceil(val)}')
+        m += 1
+    print(f'Overpayment = {math.ceil(all_payment - cp)}')
 
 
 parser = argp.ArgumentParser()
@@ -73,8 +70,25 @@ mp = args.payment
 cp = args.principal
 periods = args.periods
 ci = args.interest
-print(received_args_num)
 
-
+if received_args_num < 4 or \
+        process_type is None or \
+        ((process_type != 'annuity' and process_type == 'diff') and
+         (process_type == 'annuity' and process_type != 'diff')) or \
+        (process_type == 'diff' and mp is not None) or \
+        ((mp is not None and mp < 0) or
+         (cp is not None and cp < 0) or
+         (periods is not None and periods < 0) or
+         (ci is not None and ci < 0)) or \
+        ci is None:
+    print('Incorrect parameters')
+elif process_type == 'diff':
+    diff_payment(cp, periods, ci)
+elif process_type == 'annuity' and mp is None:
+    monthly_payment(cp, periods, ci)
+elif process_type == 'annuity' and cp is None:
+    credit_principal(mp, periods, ci)
+elif process_type == 'annuity' and periods is None:
+    months_number(cp, mp, ci)
 
 
