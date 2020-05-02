@@ -30,6 +30,7 @@ def months_number(cp, mp, ci):
         print(f'You need {years} {year_flag} to repay this credit!')
     elif years == 0 and not months == 0:
         print(f'You need {months} {month_flag} to repay this credit!')
+    print(f'Overpayment = {math.ceil((mp * n) - cp)}')
 
 
 def monthly_payment(cp, periods, ci):
@@ -39,7 +40,7 @@ def monthly_payment(cp, periods, ci):
 
 
 def credit_principal(mp, periods, ci):
-    cp = round(mp * (1 / calc_equation_second_half(monthly_interest_rate(ci), periods)))
+    cp = math.floor(mp * (1 / calc_equation_second_half(monthly_interest_rate(ci), periods)))
     print(f'Your credit principal = {cp}!')
     print(f'Overpayment = {math.ceil((mp * periods) - cp)}')
 
@@ -49,9 +50,9 @@ def diff_payment(cp, periods, ci):
     m = 1
     all_payment = 0.0
     while m <= periods:
-        val = (cp / periods) + (i * (cp - (cp * (m - 1) / periods)))
+        val = math.ceil((cp / periods) + (i * (cp - (cp * (m - 1) / periods))))
         all_payment += val
-        print(f'Month {m}: paid out {math.ceil(val)}')
+        print(f'Month {m}: paid out {val}')
         m += 1
     print(f'Overpayment = {math.ceil(all_payment - cp)}')
 
@@ -90,5 +91,3 @@ elif process_type == 'annuity' and cp is None:
     credit_principal(mp, periods, ci)
 elif process_type == 'annuity' and periods is None:
     months_number(cp, mp, ci)
-
-
