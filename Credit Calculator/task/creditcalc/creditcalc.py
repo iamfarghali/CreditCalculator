@@ -1,5 +1,6 @@
+import argparse as argp
 import math
-
+import sys
 
 def monthly_interest_rate(interest):
     return interest / (12 * 100)
@@ -58,14 +59,22 @@ def credit_principal():
     print(f'Your credit principal = {cp}!')
 
 
-print('What do you want to calculate? ')
-print('type "n" - for count of months,')
-print('type "a" - for annuity monthly payment,')
-print('type "p" - for credit principal:')
-chosen = input()
-if chosen == 'n':
-    months_number()
-elif chosen == 'a':
-    monthly_payment()
-elif chosen == 'p':
-    credit_principal()
+parser = argp.ArgumentParser()
+parser.add_argument('--type', type=str)
+parser.add_argument('--payment', type=float)
+parser.add_argument('--principal', type=float)
+parser.add_argument('--periods', type=int)
+parser.add_argument('--interest', type=float)
+args = parser.parse_args()
+received_args_num = len(sys.argv) - 1
+
+process_type = args.type
+mp = args.payment
+cp = args.principal
+periods = args.periods
+ci = args.interest
+print(received_args_num)
+
+
+
+
